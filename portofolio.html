@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Joshua Christopher Joseph | Portfolio</title>
+
+  <!-- Google font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================================================
+       Theme variables (light default). Dark will override
+       by setting data-theme="dark" on <html>.
+       ===================================================== */
+    :root {
+      --cream: #F7F2E7;
+      --navy: #1E2A38;
+      --gold: #D4A373;
+      --soft-gray: #E6E1D9;
+      --text-dark: #1E2A38;
+      --text-light: #ffffff;
+
+      /* utility */
+      --smooth-ease: cubic-bezier(.25,.8,.25,1);
+      --page-bg: var(--cream);
+      --card-bg: var(--soft-gray);
+      --primary-text: var(--text-dark);
+      --header-bg: var(--navy);
+      --muted: rgba(30,42,56,0.75);
+      --btn-hover-shadow: 0 18px 40px rgba(0,0,0,0.15);
+    }
+
+    html[data-theme="dark"] {
+      --page-bg: #0f1720;
+      --card-bg: #111827;
+      --header-bg: #0b1220;
+      --primary-text: #E6EEF6;
+      --muted: rgba(230,238,246,0.85);
+      --gold: #D4A373; /* keep accent */
+      --soft-gray: #121826;
+      --btn-hover-shadow: 0 18px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      :root { --smooth-ease: linear; }
+    }
+
+    /* =====================================================
+       Basic reset & layout
+       ===================================================== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--page-bg);
+      color:var(--primary-text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      overflow-x:hidden;
+      transition: background 0.6s var(--smooth-ease), color 0.6s var(--smooth-ease);
+    }
+    .container{width:90%;max-width:1100px;margin:0 auto;padding:0 12px}
+
+    /* NAV */
+    nav{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:28px;
+      padding:14px 0;
+      background:transparent;
+      position:sticky;
+      top:0;
+      z-index:40;
+      backdrop-filter: blur(4px);
+    }
+    nav ul{display:flex;gap:28px;list-style:none;align-items:center}
+    nav a{
+      color:var(--primary-text);
+      text-decoration:none;
+      font-weight:600;
+      transition: color 0.35s var(--smooth-ease);
+    }
+    nav a:hover{color:var(--gold)}
+
+    /* dark mode switch wrapper placed at right */
+    .nav-right{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding-right:6px;
+    }
+
+    /* iOS style toggle (accessible) */
+    .toggle {
+      --switch-w:48px;
+      --switch-h:28px;
+      --knob-d:22px;
+      position:relative;
+      display:inline-block;
+      width:var(--switch-w);
+      height:var(--switch-h);
+    }
+    .toggle input{
+      position:absolute;opacity:0;width:0;height:0;
+    }
+    .slider {
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+      transition: background 0.5s var(--smooth-ease), box-shadow 0.5s var(--smooth-ease);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .knob {
+      position:absolute;
+      top:50%;
+      left:4px;
+      width:var(--knob-d);
+      height:var(--knob-d);
+      transform:translateY(-50%);
+      background: white;
+      border-radius:50%;
+      transition: transform 0.45s var(--smooth-ease), background 0.45s var(--smooth-ease), box-shadow 0.45s var(--smooth-ease);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+    /* when checked -> move knob right and change slider bg */
+    .toggle input:checked + .slider {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow: 0 6px 22px rgba(0,0,0,0.18) inset;
+    }
+    .toggle input:checked + .slider .knob {
+      transform: translateY(-50%) translateX(calc(var(--switch-w) - var(--knob-d) - 8px));
+      background: linear-gradient(180deg,#fffbf5,#fffaf0);
+      box-shadow: 0 6px 22px rgba(0,0,0,0.22);
+    }
+
+    /* small icon inside knob for clarity (sun/moon) */
+    .knob::after{
+      content:"";
+      display:block;
+      width:100%;
+      height:100%;
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:14px;
+      transition: filter 0.35s var(--smooth-ease);
+      filter:brightness(0.95);
+    }
+
+    /* show moon in default, sun when checked */
+    html:not([data-theme="dark"]) .knob::after{
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="%231E2A38"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>');
+    }
+    html[data-theme="dark"] .knob::after{
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="%23FBBF24"><path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.8 1.8-1.8zM1 13h3v-2H1v2zm10-9h2V1h-2v3zm7.04 1.05l1.79-1.8-1.79-1.79-1.8 1.8 1.8 1.79zM17 13h6v-2h-6v2zM12 7a5 5 0 100 10 5 5 0 000-10zM6.76 19.16l-1.8 1.79 1.8 1.79 1.79-1.79-1.79-1.79zM17 21h2v-3h-2v3zM3.17 19.16l1.79-1.79-1.79-1.79-1.79 1.79 1.79 1.79z"/></svg>');
+    }
+
+    /* small accessible label text */
+    .toggle-label{font-size:0.9rem;color:var(--muted);margin-left:6px;font-weight:600}
+
+    /* ===================================================================
+       HERO
+       =================================================================== */
+    header{
+      background:var(--header-bg);
+      color:var(--text-light);
+      text-align:center;
+      padding:92px 14px 120px;
+    }
+    .profile-photo{
+      width:220px;height:220px;object-fit:cover;border-radius:50%;border:4px solid #fff;margin-bottom:18px;box-shadow:0 8px 20px rgba(0,0,0,0.25);
+      transition: transform 0.6s var(--smooth-ease), box-shadow 0.6s var(--smooth-ease);
+    }
+    header h1{font-size:2.6rem;letter-spacing:-0.3px}
+    header p{margin-top:8px;opacity:0.95}
+
+    /* ===================================================================
+       SECTIONS
+       =================================================================== */
+    section{padding:72px 0}
+    section h2{font-size:2.2rem;text-align:center;margin-bottom:34px;position:relative}
+    section h2::after{content:"";width:56px;height:4px;background:var(--gold);display:block;margin:10px auto 0;border-radius:2px}
+
+    /* ===================================================================
+       SKILLS (smooth hover)
+       =================================================================== */
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;max-width:920px;margin:0 auto}
+    .skill-btn{
+      background:var(--card-bg);
+      border:none;padding:16px 18px;border-radius:14px;font-weight:700;color:var(--primary-text);cursor:pointer;
+      text-align:left;position:relative;will-change:transform,box-shadow,background-color;
+      transition: transform 0.9s var(--smooth-ease), box-shadow 0.9s var(--smooth-ease), background-color 0.9s var(--smooth-ease), color 0.6s var(--smooth-ease);
+      display:block;
+      min-height:64px;
+    }
+    .skill-btn .title{font-weight:700}
+    .skill-btn .expand{float:right;color:var(--gold);transition:color 0.6s var(--smooth-ease)}
+    .skill-btn:hover{transform:translateY(-10px) scale(1.02);box-shadow:var(--btn-hover-shadow);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:var(--primary-text)}
+    html:not([data-theme="dark"]) .skill-btn:hover{background:var(--gold);color:var(--text-light)}
+    html:not([data-theme="dark"]) .skill-btn:hover .expand{color:var(--text-light)}
+    html[data-theme="dark"] .skill-btn .expand{color:var(--gold)}
+
+    .skill-detail{display:block;opacity:0;transform:translateY(6px);transition:opacity 0.6s var(--smooth-ease), transform 0.6s var(--smooth-ease);font-weight:500;margin-top:8px;color:var(--muted)}
+    .skill-btn:hover .skill-detail{opacity:1;transform:translateY(0)}
+
+    /* ===================================================================
+       ACTIVITIES
+       =================================================================== */
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px;max-width:1100px;margin:0 auto}
+    .project-card{background:var(--card-bg);padding:22px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);transition:transform 0.7s var(--smooth-ease),box-shadow 0.7s var(--smooth-ease)}
+    .project-card:hover{transform:translateY(-10px);box-shadow:var(--btn-hover-shadow)}
+
+    /* ===================================================================
+       CONTACT + FOOTER
+       =================================================================== */
+    #contact p{text-align:center;font-size:1.05rem}
+    #contact a{color:var(--gold);font-weight:700;text-decoration:none;transition:color 0.3s var(--smooth-ease)}
+    #contact a:hover{text-decoration:underline;color:var(--primary-text)}
+
+    footer{background:var(--header-bg);color:var(--text-light);text-align:center;padding:24px;margin-top:36px}
+
+    /* ===================================================================
+       RESPONSIVE
+       =================================================================== */
+    @media (max-width:880px){
+      nav ul{gap:18px}
+      header{padding:78px 12px 100px}
+      .profile-photo{width:180px;height:180px}
+    }
+    @media (max-width:520px){
+      .skills-grid{grid-template-columns:1fr}
+      .projects-grid{grid-template-columns:1fr}
+      nav ul{gap:12px}
+      .nav-right{margin-left:6px}
+    }
+  </style>
+</head>
+<body>
+  <nav class="container" aria-label="Main navigation">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#activities">Activities</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- right side: dark mode toggle (iOS-style) -->
+    <div class="nav-right" role="region" aria-label="Theme toggle">
+      <label class="toggle" aria-hidden="false">
+        <input id="theme-toggle" type="checkbox" aria-label="Toggle dark mode" />
+        <span class="slider" aria-hidden="true">
+          <span class="knob" aria-hidden="true"></span>
+        </span>
+      </label>
+      <div class="toggle-label" id="toggle-label">Dark</div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="home">
+    <img src="IMG_1701.JPEG" alt="Joshua Christopher Joseph" class="profile-photo" />
+    <h1>Hi, I'm Joshua Christopher Joseph</h1>
+    <p>Student Athlete | Soon to be Mechanical Engineer</p>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about" class="container">
+    <h2>About Me</h2>
+    <p>I’m a student-athlete from SMAK Penabur Gading Serpong, passionate about basketball and working toward my goal of becoming a mechanical engineer. Balancing academics and sports has taught me discipline, resilience, and the value of continuous growth. Guided by Jeremiah 29:11 — “For I know the plans I have for you, declares the Lord… plans to give you hope and a future.”</p>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <button class="skill-btn" type="button">
+          <span class="title">English</span><span class="expand">+</span>
+          <div class="skill-detail">C1 Level in English.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">Indonesian</span><span class="expand">+</span>
+          <div class="skill-detail">Native proficiency in Bahasa Indonesia.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">Mandarin</span><span class="expand">+</span>
+          <div class="skill-detail">Basic Mandarin conversations.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">Mathematics</span><span class="expand">+</span>
+          <div class="skill-detail">Algebra, Calculus, Trigonometry, Data Analysis.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">Physics</span><span class="expand">+</span>
+          <div class="skill-detail">Mechanics, Forces, Energy, and Engineering Physics.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">Python</span><span class="expand">+</span>
+          <div class="skill-detail">Basic scripting and programming logic.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">Web Development</span><span class="expand">+</span>
+          <div class="skill-detail">HTML/CSS and responsive UI design.</div>
+        </button>
+
+        <button class="skill-btn" type="button">
+          <span class="title">AutoCAD</span><span class="expand">+</span>
+          <div class="skill-detail">2D drafting and introductory 3D modeling.</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITIES -->
+  <section id="activities" class="container">
+    <h2>Activities</h2>
+    <div class="projects-grid">
+      <article class="project-card">
+        <h3>Organization Committee</h3>
+        <p>Responsible for GSO basketball tournaments for 2 years.</p>
+      </article>
+
+      <article class="project-card">
+        <h3>Fundraising Events</h3>
+        <p>Part of the Orchestra Team supporting prom event funding.</p>
+      </article>
+
+      <article class="project-card">
+        <h3>Basketball Journey</h3>
+        <p>Started in 9th grade, won provincial title, competed nationally.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="container">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:joshua.christopher.joseph@gmail.com">joshua.christopher.joseph@gmail.com</a></p>
+    <p>Phone: <a href="tel:+628197996050">+62 819-7996-050</a></p>
+    <p>Instagram: <a href="https://instagram.com/joshua_c_j" target="_blank" rel="noopener noreferrer">@joshua_c_j</a></p>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 Joshua Christopher Joseph. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+      const label = document.getElementById('toggle-label');
+
+      // Determine initial theme:
+      // Priority: localStorage -> prefers-color-scheme -> default light
+      const saved = localStorage.getItem('jcj_theme'); // 'dark' | 'light' or null
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          root.setAttribute('data-theme', 'dark');
+          toggle.checked = true;
+          label.textContent = 'Dark';
+        } else {
+          root.removeAttribute('data-theme');
+          toggle.checked = false;
+          label.textContent = 'Light';
+        }
+      }
+
+      // initialize
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        applyTheme('dark');
+      } else {
+        applyTheme('light');
+      }
+
+      // handle toggle change
+      toggle.addEventListener('change', (e) => {
+        const next = e.target.checked ? 'dark' : 'light';
+        applyTheme(next);
+        try { localStorage.setItem('jcj_theme', next); } catch (err) { /* ignore storage errors */ }
+      });
+
+      // keyboard accessibility: allow label text toggle click
+      document.querySelector('.toggle').addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          toggle.checked = !toggle.checked;
+          toggle.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
